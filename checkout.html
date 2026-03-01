@@ -127,7 +127,7 @@ input{
       <input id="zip" placeholder="CEP" required />
     </div>
 
-    <button class="checkout-btn" id="confirmBtn">
+    <button type="button" class="checkout-btn" id="confirmBtn">
       Finalizar Compra
     </button>
   </div>
@@ -144,118 +144,80 @@ input{
 </div>
 
 <script>
-const raw = localStorage.getItem("cb_cart_v2");
-const parsed = raw ? JSON.parse(raw) : null;
-const cart = (parsed && parsed.items) ? parsed.items : [];
+document.addEventListener("DOMContentLoaded", () => {
 
-if(!cart.length){
-  window.location.href = "/";
-}
+  const raw =
+    localStorage.getItem("cb_cart_v2") ||
+    localStorage.getItem("cb_cart");
 
-const summaryEl = document.getElementById("summary");
-const totalEl = document.getElementById("total");
+  const parsed = raw ? JSON.parse(raw) : null;
 
-let total = 0;
+  const cart = Array.isArray(parsed)
+    ? parsed
+    : parsed?.items || [];
 
-function parsePriceToCents(value){
-  if(value === null || value === undefined) return 0;
-  if(typeof value === 'number' && isFinite(value)) return Math.round(value*100);
-  const s = String(value).trim();
-  if(!s) return 0;
-  const m = s.match(/(\d+[.,]?\d*)/);
-  if(!m) return 0;
-  const norm = m[1].replace(/\./g,'').replace(',', '.');
-  const n = Number(norm);
-  if(!isFinite(n) || n<=0) return 0;
-  return Math.round(n*100);
-}
-
-async function buildSummary() {
-  // Load products from API (same source as catalog)
-  const res = await fetch("/api/products", { cache: "no-store" });
-  const products = await res.json();
-
-  cart.forEach(item => {
-    const product = products.find(p => p.sku === item.sku);
-    if (!product) return;
-
-const price = (product.price_cents != null && Number(product.price_cents) > 0)
-  ? Number(product.price_cents)
-  : parsePriceToCents(product.price);
-    const qty = Number(item.qty || 1);
-    const lineTotal = price * qty;
-
-    const div = document.createElement("div");
-    div.className = "summary-item";
-    div.innerHTML = `
-      <span>${product.name} x${qty}</span>
-      <span>R$ ${(lineTotal / 100).toFixed(2)}</span>
-    `;
-
-    summaryEl.appendChild(div);
-    total += lineTotal;
-  });
-
-  totalEl.textContent = "R$ " + (total / 100).toFixed(2);
-}
-
-buildSummary();
-  
-async function startCheckout(items){
-  const res = await fetch("/api/create-preference", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ items })
-  });
-
-  if(!res.ok){
-    const text = await res.text();
-    throw new Error(text || "Erro ao iniciar pagamento.");
+  if (!cart.length) {
+    alert("Carrinho vazio.");
+    window.location.href = "/";
+    return;
   }
 
-  return res.json();
-}
-  
-document.getElementById("confirmBtn").addEventListener("click", async ()=>{
+  const confirmBtn = document.getElementById("confirmBtn");
 
-  const requiredFields = ["name","email","phone","street","number","city","state","zip"];
+  confirmBtn.addEventListener("click", async () => {
 
-  for(const id of requiredFields){
-    if(!document.getElementById(id).value.trim()){
-      alert("Preencha todos os campos.");
-      return;
+    const requiredFields = [
+      "name","email","phone",
+      "street","number","city","state","zip"
+    ];
+
+    for (const id of requiredFields) {
+      const el = document.getElementById(id);
+      if (!el || !el.value.trim()) {
+        alert("Preencha todos os campos.");
+        return;
+      }
     }
-  }
 
-  const shippingData = {
-    name: name.value,
-    email: email.value,
-    phone: phone.value,
-    street: street.value,
-    number: number.value,
-    city: city.value,
-    state: state.value,
-    zip: zip.value
-  };
+    const shippingData = {
+      name: name.value,
+      email: email.value,
+      phone: phone.value,
+      street: street.value,
+      number: number.value,
+      city: city.value,
+      state: state.value,
+      zip: zip.value
+    };
 
-  localStorage.setItem("cb_shipping", JSON.stringify(shippingData));
+    try {
+      console.log("Sending checkout request...");
 
-  trconst data = await fetch("/api/create-preference", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    items: cart,
-    shipping: shippingData
-  })
-}).then(r => r.json());
-    if(data && data.checkout_url){
-      window.location.href = data.checkout_url;
-    } else {
+      const res = await fetch("/api/create-preference", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: cart,
+          shipping: shippingData
+        })
+      });
+
+      const data = await res.json();
+
+      console.log("Response:", data);
+
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        alert("Erro ao iniciar pagamento.");
+      }
+
+    } catch (err) {
+      console.error(err);
       alert("Erro ao iniciar pagamento.");
     }
-  }catch(e){
-    alert("Erro ao iniciar pagamento.");
-  }
+
+  });
 
 });
 </script>
