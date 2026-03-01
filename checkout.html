@@ -240,8 +240,14 @@ document.getElementById("confirmBtn").addEventListener("click", async ()=>{
 
   localStorage.setItem("cb_shipping", JSON.stringify(shippingData));
 
-  try{
-    const data = await startCheckout(cart);
+  trconst data = await fetch("/api/create-preference", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    items: cart,
+    shipping: shippingData
+  })
+}).then(r => r.json());
     if(data && data.checkout_url){
       window.location.href = data.checkout_url;
     } else {
