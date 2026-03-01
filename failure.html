@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cristal Bags — Pagamento não concluído</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .wrap{ max-width:900px; margin: 0 auto; padding: 28px 16px 60px 16px;}
+    .card{
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 18px 18px;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="top">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container hero__inner">
+      <div class="brand">
+        <div class="brand__logo">Cristal Bags</div>
+        <div class="brand__tag">Pagamento</div>
+      </div>
+      <nav class="nav">
+        <a class="btn" href="./">Voltar ao catálogo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="card">
+      <h2 style="margin:0 0 10px 0">Pagamento não concluído</h2>
+      <p class="muted" style="margin:0 0 14px 0">
+        Se você cancelou ou ocorreu algum erro, você pode tentar novamente.
+      </p>
+      <div style="display:flex; flex-wrap:wrap; gap:10px;">
+        <a class="btn" href="./">Voltar ao catálogo</a>
+        <a class="btn btn--ghost" id="whats" href="#" target="_blank" rel="noreferrer">Falar no WhatsApp</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const WHATSAPP_NUMBER = "5521972841917";
+    const waLink = (msg) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    const qs = new URLSearchParams(location.search);
+    const payment_id = qs.get("payment_id");
+    const status = qs.get("status");
+    const external_reference = qs.get("external_reference");
+    document.getElementById("whats").href = waLink(
+      `Olá! Tive problema no pagamento do catálogo Cristal Bags.\n` +
+      (external_reference ? `Pedido: ${external_reference}\n` : "") +
+      (payment_id ? `Payment ID: ${payment_id}\n` : "") +
+      (status ? `Status: ${status}` : "")
+    );
+  </script>
+</body>
+</html>

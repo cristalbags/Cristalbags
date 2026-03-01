@@ -1,0 +1,235 @@
+[
+  {
+    "sku": "CB-001",
+    "name": "Mochila Holográfica P",
+    "category": "Mochilas",
+    "price": "R$ 44,90",
+    "dimensions": "Medidas (cm) 23x19x9",
+    "desc": "",
+    "image": "images/produto-001.jpg",
+    "premium": false,
+    "price_cents": 4490
+  },
+  {
+    "sku": "CB-002",
+    "name": "Mochila Holográfica P Personalizada",
+    "category": "Mochilas",
+    "price": "R$ 55,90",
+    "dimensions": "Medidas (cm) 23x19x9",
+    "desc": "Personalizada.",
+    "image": "images/produto-002.jpg",
+    "premium": false,
+    "price_cents": 5590
+  },
+  {
+    "sku": "CB-003",
+    "name": "Mochila Sugar Dream",
+    "category": "Mochilas",
+    "price": "R$ 79,90 (G) / R$ 59,90 (P)",
+    "dimensions": "G: 30x22x12 • P: 23x19x9",
+    "desc": "",
+    "image": "images/produto-003.jpg",
+    "premium": false,
+    "variants": [
+      {
+        "id": "P",
+        "label": "P (23x19x9)",
+        "price_cents": 5990
+      },
+      {
+        "id": "G",
+        "label": "G (30x22x12)",
+        "price_cents": 7990
+      }
+    ],
+    "default_variant": "P",
+    "price_cents": null
+  },
+  {
+    "sku": "CB-004",
+    "name": "Mochila Cristal P",
+    "category": "Mochilas",
+    "price": "R$ 32,90",
+    "dimensions": "Medidas (cm) 23x19x9",
+    "desc": "",
+    "image": "images/produto-004.jpg",
+    "premium": false,
+    "price_cents": 3290
+  },
+  {
+    "sku": "CB-005",
+    "name": "Mochila Holográfica Dream Shine",
+    "category": "Mochilas",
+    "price": "R$ 94,90",
+    "dimensions": "Medidas (cm) 30x22x12",
+    "desc": "",
+    "image": "images/produto-005.jpg",
+    "premium": true,
+    "price_cents": 9490
+  },
+  {
+    "sku": "CB-006",
+    "name": "Mochilinha Holográfica P",
+    "category": "Mochilas",
+    "price": "R$ 24,90",
+    "dimensions": "Medidas (cm) 20x18x10",
+    "desc": "",
+    "image": "images/produto-006.jpg",
+    "premium": false,
+    "price_cents": 2490
+  },
+  {
+    "sku": "CB-007",
+    "name": "Cilindro Holográfica Personalizada",
+    "category": "Cilindros",
+    "price": "R$ 143,90",
+    "dimensions": "Medidas (cm) 33x18x18",
+    "desc": "Personalizada.",
+    "image": "images/produto-007.jpg",
+    "premium": true,
+    "price_cents": 14390
+  },
+  {
+    "sku": "CB-008",
+    "name": "Cilindro Rainbow",
+    "category": "Cilindros",
+    "price": "R$ 133,90",
+    "dimensions": "Medidas (cm) 33x18x18",
+    "desc": "",
+    "image": "images/produto-008.jpg",
+    "premium": true,
+    "price_cents": 13390
+  },
+  {
+    "sku": "CB-009",
+    "name": "Cilindro Rainbow Personalizada",
+    "category": "Cilindros",
+    "price": "R$ 143,90",
+    "dimensions": "Medidas (cm) 33x18x18",
+    "desc": "Personalizada.",
+    "image": "images/produto-009.jpg",
+    "premium": true,
+    "price_cents": 14390
+  },
+  {
+    "sku": "CB-010",
+    "name": "Cilindro Holográfica",
+    "category": "Cilindros",
+    "price": "R$ 133,90",
+    "dimensions": "Medidas (cm) 33x18x18",
+    "desc": "",
+    "image": "images/produto-010.jpg",
+    "premium": true,
+    "price_cents": 13390
+  },
+  {
+    "sku": "CB-011",
+    "name": "Shoulder Bag Sun Shine",
+    "category": "Shoulder Bags",
+    "price": "R$ 29,90",
+    "dimensions": "Medidas (cm) 20x17x19",
+    "desc": "",
+    "image": "images/produto-011.jpg",
+    "premium": false,
+    "price_cents": 2990
+  },
+  {
+    "sku": "CB-012",
+    "name": "Shoulder Bag",
+    "category": "Shoulder Bags",
+    "price": "R$ 25,90",
+    "dimensions": "Medidas (cm) 20x17x19",
+    "desc": "",
+    "image": "images/produto-012.jpg",
+    "premium": false,
+    "price_cents": 2590
+  },
+  {
+    "sku": "CB-013",
+    "name": "Maleta Cristal Holográfica",
+    "category": "Maletas",
+    "price": "R$ 33,90",
+    "dimensions": "Medidas (cm) 16x24x9",
+    "desc": "",
+    "image": "images/produto-013.jpg",
+    "premium": false,
+    "price_cents": 3390
+  },
+  {
+    "sku": "CB-014",
+    "name": "Maleta Magic Box",
+    "category": "Maletas",
+    "price": "R$ 44,90",
+    "dimensions": "Medidas (cm) 16x24x9",
+    "desc": "",
+    "image": "images/produto-014.jpg",
+    "premium": false,
+    "price_cents": 4490
+  },
+  {
+    "sku": "CB-015",
+    "name": "Necessaire com Alça em Cima",
+    "category": "Necessaires",
+    "price": "R$ 28,90",
+    "dimensions": "Medidas (cm) 22x13x8",
+    "desc": "",
+    "image": "images/produto-015.jpg",
+    "premium": false,
+    "price_cents": 2890
+  },
+  {
+    "sku": "CB-016",
+    "name": "Necessaire Box Personalizada",
+    "category": "Necessaires",
+    "price": "R$ 34,90",
+    "dimensions": "Medidas (cm) 16x24x9",
+    "desc": "Personalizada.",
+    "image": "images/produto-016.jpg",
+    "premium": true,
+    "price_cents": 3490
+  },
+  {
+    "sku": "CB-017",
+    "name": "Necessaire Personalizada",
+    "category": "Necessaires",
+    "price": "R$ 26,90",
+    "dimensions": "Medidas (cm) 22x13x8",
+    "desc": "Personalizada.",
+    "image": "images/produto-017.jpg",
+    "premium": false,
+    "price_cents": 2690
+  },
+  {
+    "sku": "CB-018",
+    "name": "Estojinho Personalizado",
+    "category": "Estojos",
+    "price": "R$ 21,90",
+    "dimensions": "Medidas (cm) 20x12x8",
+    "desc": "Personalizado.",
+    "image": "images/produto-018.jpg",
+    "premium": false,
+    "price_cents": 2190
+  },
+  {
+    "sku": "CB-019",
+    "name": "Necessaire",
+    "category": "Necessaires",
+    "price": "R$ 22,90",
+    "dimensions": "Medidas (cm) 22x13x8",
+    "desc": "",
+    "image": "images/produto-019.jpg",
+    "premium": false,
+    "price_cents": 2290
+  },
+  {
+    "sku": "CB-020",
+    "name": "Estojinho com Alça",
+    "category": "Estojos",
+    "price": "R$ 17,90",
+    "dimensions": "Medidas (cm) 20x12x8",
+    "desc": "",
+    "image": "images/produto-020.jpg",
+    "premium": false,
+    "price_cents": 1790
+  }
+]

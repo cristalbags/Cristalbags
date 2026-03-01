@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CristalBags — Catálogo</title>
+  <meta name="description" content="CristalBags — Catálogo de produtos. Beleza, estilo e muito brilho!" />
+
+  <meta property="og:title" content="CristalBags — Catálogo" />
+  <meta property="og:description" content="Beleza, estilo e muito brilho! Confira o catálogo e peça orçamento no WhatsApp." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <header class="hero" id="top">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__cloud" aria-hidden="true"></div>
+
+    
+    <div class="hero__showcase" aria-label="Vídeo de apresentação">
+      <div class="heroVideo">
+        <img class="heroVideo__poster" src="video/hero-poster.jpg" alt="" aria-hidden="true" />
+        <video class="heroVideo__media" autoplay muted loop playsinline preload="metadata" poster="video/hero-poster.jpg">
+          <source src="video/hero.mp4" type="video/mp4">
+        </video>
+        <div class="heroVideo__sheen" aria-hidden="true"></div>
+      </div>
+    </div>
+
+<div class="container hero__inner">
+      <div class="brand">
+        <div class="brand__logo">Cristal Bags</div>
+        <div class="brand__tag">Beleza, estilo e muito brilho!</div>
+      </div>
+
+      <nav class="nav">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#faq">Perguntas</a>
+        <a class="btn" id="ctaTop" href="#" target="_blank" rel="noreferrer">WhatsApp</a>
+      
+        <button class="cartBtn" id="cartBtn" aria-label="Carrinho" type="button">
+          <span class="cartBtn__icon" aria-hidden="true">🛒</span>
+          <span class="cartBtn__count" id="cartCount">0</span>
+        </button>
+</nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="titleBlock">
+      <div class="container">
+        <h1>Catálogo</h1>
+      </div>
+    </section>
+
+    <section id="catalogo" class="section">
+      <div class="container">
+
+        <div class="catalogMeta">
+          <div class="catalogMeta__pill">✨ Premium em destaque</div>
+          <div class="catalogMeta__note">Atacado • Pedido e orçamento pelo WhatsApp</div>
+        </div>
+    
+<div id="grid" class="grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="faq" class="section section--faq">
+      <div class="container">
+        <h2 class="faqTitle">Perguntas frequentes</h2>
+
+        <div class="faqGrid">
+          <div class="faqCard faqCard--mint">
+            <h3>Quais são as cores disponíveis?</h3>
+            <p>Rosa bebê, rosa pink, lilás, tiffany, amarelo, azul bebê e branco.</p>
+          </div>
+
+          <div class="faqCard faqCard--white">
+            <h3>Fazem outros modelos?</h3>
+            <p>Sim! Trabalhamos com modelos expostos e também lançamentos. Chame no WhatsApp para ver novidades.</p>
+          </div>
+
+          <div class="faqCard faqCard--purple">
+            <h3>Vocês vendem no atacado? Qual o mínimo?</h3>
+            <p>Sim. O mínimo varia por produto. Chame no WhatsApp para preço e condições de atacado.</p>
+          </div>
+
+          <div class="faqCard faqCard--beige">
+            <h3>Como funciona a personalização?</h3>
+            <p>Personalização com nome ou logo (avaliamos a arte antes). Fale com a gente no WhatsApp.</p>
+          </div>
+
+          <div class="faqCard faqCard--mint">
+            <h3>O que são produtos Premium?</h3>
+            <p>Os produtos Premium são feitos de PVC holográfico importado que não marca e recupera a forma com calor.</p>
+        </div>
+
+          <div class="faqCard faqCard--purple">
+            <h3>Vendem na Shopee?</h3>
+            <p>Sim! Pode nos encontrar com o nome "Cristal Bags" na Shopee.</p>
+          </div>
+          
+        <div class="ctaRow">
+          <a class="btn btn--wide" id="ctaFAQ" href="#" target="_blank" rel="noreferrer">Pedir orçamento no WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <div class="footer__brand">CristalBags</div>
+        <small>© <span id="year"></span> • Catálogo</small>
+      </div>
+      <div class="footer__links">
+        <a href="#top">Topo</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#faq">Perguntas</a>
+      </div>
+    </div>
+  </footer>
+
+<!-- Cart drawer -->
+  <div class="drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer__backdrop" id="cartBackdrop"></div>
+    <aside class="drawer__panel" role="dialog" aria-label="Carrinho">
+      <header class="drawer__header">
+        <h3>Seu carrinho</h3>
+        <button class="drawer__close" id="cartClose" aria-label="Fechar carrinho" type="button">✕</button>
+      </header>
+
+      <div class="drawer__items" id="cartItems"></div>
+
+      <div class="drawer__summary">
+        <div class="drawer__row">
+          <span class="muted">Total</span>
+          <strong id="cartTotal">R$ 0,00</strong>
+        </div>
+
+        <button class="btn btn--wide" id="checkoutBtn" type="button">Finalizar no Mercado Pago</button>
+        <a class="btn btn--ghost btn--wide" id="cartWhats" href="#" target="_blank" rel="noreferrer">Pedir orçamento no WhatsApp</a>
+
+        <p class="drawer__fineprint muted">Pagamento 100% seguro via Mercado Pago. Você não digita cartão neste site.</p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Product modal -->
+  <div class="modal" id="modal" aria-hidden="true" role="dialog" aria-label="Detalhes do produto">
+    <div class="modal__backdrop" id="modalBackdrop"></div>
+    <div class="modal__panel" role="document">
+      <button class="modal__close" id="modalClose" aria-label="Fechar">✕</button>
+      <div class="modal__content">
+        <img id="mImg" alt="" class="modal__img" />
+        <div class="modal__info">
+          <div class="modal__kicker" id="mCat"></div>
+          <h3 id="mName"></h3>
+          <p class="muted" id="mDesc"></p>
+
+          <div class="modal__variants" id="mVariantsWrap" style="display:none;">
+            <label class="muted" for="mVariant">Tamanho</label>
+            <select id="mVariant" class="select"></select>
+          </div>
+
+          <div class="modal__meta">
+            <div><span class="muted">SKU</span><br><strong id="mSku"></strong></div>
+            <div><span class="muted">Preço</span><br><strong id="mPrice"></strong></div>
+          </div>
+
+          <div class="modal__actions">
+            <button class="btn btn--wide" id="mAdd" type="button">Adicionar ao carrinho</button>
+            <button class="btn btn--ghost btn--wide" id="mBuyNow" type="button">Comprar agora (Mercado Pago)</button>
+            <a class="btn btn--wide" id="mWhats" href="#" target="_blank" rel="noreferrer">Pedir este produto no WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+
+  <script id="__PRODUCTS__" type="application/json">
+[
+  {
+    "sku": "CB-001",
+    "name": "Mochila Holográfica P",
+    "category": "Mochilas",
+    "price": "R$ 44,90",
+    "dimensions": "Medidas (cm) 23x19x9",
+    "desc": "",
+    "image": "images/produto-001.jpg",
+    "premium": true,
+    "price_cents": 4490
+  },
+  {
+    "sku": "CB-002",
+    "name": "Mochila Holográfica P Personalizada",
+    "category": "Mochilas",
+    "price": "R$ 55,90",
+    "dimensions": "Medidas (cm) 23x19x9",
+    "desc": "Personalizada.",
+    "image": "images/produto-002.jpg",
+    "premium": true,
+    "price_cents": 5590
+  },
+  {
+    "sku": "CB-003",
+    "name": "Mochila Sugar Dream",
+    "category": "Mochilas",
+    "price": "R$ 79,90 (G) / R$ 59,90 (P)",
+    "dimensions": "G: 30x22x12 • P: 23x19x9",
+    "desc": "",
+    "image": "images/produto-003.jpg",
+    "premium": false,
+    "variants": [
+      {
+        "id": "P",
+        "label": "P (23x19x9)",
+        "price_cents": 5990
+      },
+      {
+        "id": "G",
+        "label": "G (30x22x12)",
+        "price_cents": 7990
+      }
+    ],
+    "default_variant": "P",
+    "price_cents": null
+  },
+  {
+    "sku": "CB-004",
+    "name": "Mochila Cristal P",
+    "category": "Mochilas",
+    "price": "R$ 32,90",
+    "dimensions": "Medidas (cm) 23x19x9",
+    "desc": "",
+    "image": "images/produto-004.jpg",
+    "premium": false,
+    "price_cents": 3290
+  },
+  {
+    "sku": "CB-005",
+    "name": "Mochila Holográfica Dream Shine",
+    "category": "Mochilas",
+    "price": "R$ 94,90",
+    "dimensions": "Medidas (cm) 30x22x12",
+    "desc": "",
+    "image": "images/produto-005.jpg",
+    "premium": true,
+    "price_cents": 9490
+  },
+  {
+    "sku": "CB-006",
+    "name": "Mochilinha Holográfica P",
+    "category": "Mochilas",
+    "price": "R$ 24,90",
+    "dimensions": "Medidas (cm) 20x18x10",
+    "desc": "",
+    "image": "images/produto-006.jpg",
+    "premium": false,
+    "price_cents": 2490
+  },
+  {
+    "sku": "CB-007",
+    "name": "Cilindro Holográfica Personalizada",
+    "category": "Cilindros",
+    "price": "R$ 143,90",
+    "dimensions": "Medidas (cm) 33x18x18",
+    "desc": "Personalizada.",
+    "image": "images/produto-007.jpg",
+    "premium": true,
+    "price_cents": 14390
+  },
+  {
+    "sku": "CB-008",
+    "name": "Cilindro Rainbow",
+    "category": "Cilindros",
+    "price": "R$ 133,90",
+    "dimensions": "Medidas (cm) 33x18x18",
+    "desc": "",
+    "image": "images/produto-008.jpg",
+    "premium": true,
+    "price_cents": 13390
+  },
+  {
+    "sku": "CB-009",
+    "name": "Cilindro Rainbow Personalizada",
+    "category": "Cilindros",
+    "price": "R$ 143,90",
+    "dimensions": "Medidas (cm) 33x18x18",
+    "desc": "Personalizada.",
+    "image": "images/produto-009.jpg",
+    "premium": true,
+    "price_cents": 14390
+  },
+  {
+    "sku": "CB-010",
+    "name": "Cilindro Holográfica",
+    "category": "Cilindros",
+    "price": "R$ 133,90",
+    "dimensions": "Medidas (cm) 33x18x18",
+    "desc": "",
+    "image": "images/produto-010.jpg",
+    "premium": true,
+    "price_cents": 13390
+  },
+  {
+    "sku": "CB-011",
+    "name": "Shoulder Bag Sun Shine",
+    "category": "Shoulder Bags",
+    "price": "R$ 29,90",
+    "dimensions": "Medidas (cm) 20x17x19",
+    "desc": "",
+    "image": "images/produto-011.jpg",
+    "premium": false,
+    "price_cents": 2990
+  },
+  {
+    "sku": "CB-012",
+    "name": "Shoulder Bag",
+    "category": "Shoulder Bags",
+    "price": "R$ 25,90",
+    "dimensions": "Medidas (cm) 20x17x19",
+    "desc": "",
+    "image": "images/produto-012.jpg",
+    "premium": false,
+    "price_cents": 2590
+  },
+  {
+    "sku": "CB-013",
+    "name": "Maleta Cristal Holográfica",
+    "category": "Maletas",
+    "price": "R$ 33,90",
+    "dimensions": "Medidas (cm) 16x24x9",
+    "desc": "",
+    "image": "images/produto-013.jpg",
+    "premium": false,
+    "price_cents": 3390
+  },
+  {
+    "sku": "CB-014",
+    "name": "Maleta Magic Box",
+    "category": "Maletas",
+    "price": "R$ 44,90",
+    "dimensions": "Medidas (cm) 16x24x9",
+    "desc": "",
+    "image": "images/produto-014.jpg",
+    "premium": false,
+    "price_cents": 4490
+  },
+  {
+    "sku": "CB-015",
+    "name": "Necessaire com Alça em Cima",
+    "category": "Necessaires",
+    "price": "R$ 28,90",
+    "dimensions": "Medidas (cm) 22x13x8",
+    "desc": "",
+    "image": "images/produto-015.jpg",
+    "premium": false,
+    "price_cents": 2890
+  },
+  {
+    "sku": "CB-016",
+    "name": "Necessaire Box Personalizada",
+    "category": "Necessaires",
+    "price": "R$ 34,90",
+    "dimensions": "Medidas (cm) 16x24x9",
+    "desc": "Personalizada.",
+    "image": "images/produto-016.jpg",
+    "premium": true,
+    "price_cents": 3490
+  },
+  {
+    "sku": "CB-017",
+    "name": "Necessaire Personalizada",
+    "category": "Necessaires",
+    "price": "R$ 26,90",
+    "dimensions": "Medidas (cm) 22x13x8",
+    "desc": "Personalizada.",
+    "image": "images/produto-017.jpg",
+    "premium": false,
+    "price_cents": 2690
+  },
+  {
+    "sku": "CB-018",
+    "name": "Estojinho Personalizado",
+    "category": "Estojos",
+    "price": "R$ 21,90",
+    "dimensions": "Medidas (cm) 20x12x8",
+    "desc": "Personalizado.",
+    "image": "images/produto-018.jpg",
+    "premium": false,
+    "price_cents": 2190
+  },
+  {
+    "sku": "CB-019",
+    "name": "Necessaire",
+    "category": "Necessaires",
+    "price": "R$ 22,90",
+    "dimensions": "Medidas (cm) 22x13x8",
+    "desc": "",
+    "image": "images/produto-019.jpg",
+    "premium": false,
+    "price_cents": 2290
+  },
+  {
+    "sku": "CB-020",
+    "name": "Estojinho com Alça",
+    "category": "Estojos",
+    "price": "R$ 17,90",
+    "dimensions": "Medidas (cm) 20x12x8",
+    "desc": "",
+    "image": "images/produto-020.jpg",
+    "premium": false,
+    "price_cents": 1790
+  }
+]
+  </script>
+</body>
+</html>

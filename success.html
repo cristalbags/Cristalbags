@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cristal Bags — Pagamento</title>
+  <meta name="description" content="Status do pagamento — Cristal Bags" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .statusWrap{ max-width:900px; margin: 0 auto; padding: 28px 16px 60px 16px;}
+    .statusCard{
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 18px 18px;
+    }
+    .statusGrid{ display:grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px;}
+    @media (min-width: 720px){ .statusGrid{ grid-template-columns: 1fr 1fr; } }
+    .kv{ padding: 12px; border-radius: 16px; border:1px solid rgba(0,0,0,.06); background: rgba(255,255,255,.75); }
+    .kv b{ display:block; margin-top:4px; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.55);
+      border:1px solid rgba(0,0,0,.08);
+      font-weight:800;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="top">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="container hero__inner">
+      <div class="brand">
+        <div class="brand__logo">Cristal Bags</div>
+        <div class="brand__tag">Pagamento</div>
+      </div>
+      <nav class="nav">
+        <a class="btn" href="./">Voltar ao catálogo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="statusWrap">
+    <div class="statusCard">
+      <div class="pill" id="pill">Verificando pagamento…</div>
+
+      <div class="statusGrid">
+        <div class="kv"><span class="muted">Status</span><b id="statusTxt">—</b></div>
+        <div class="kv"><span class="muted">Pedido</span><b id="orderTxt">—</b></div>
+        <div class="kv"><span class="muted">Payment ID</span><b id="paymentTxt">—</b></div>
+        <div class="kv"><span class="muted">Valor</span><b id="amountTxt">—</b></div>
+        <div class="kv"><span class="muted">Cartão (últimos 4)</span><b id="cardTxt">—</b></div>
+        <div class="kv"><span class="muted">Método</span><b id="methodTxt">—</b></div>
+      </div>
+
+      <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:10px;">
+        <a class="btn" id="whatsBtn" href="#" target="_blank" rel="noreferrer">Falar no WhatsApp</a>
+        <a class="btn btn--ghost" href="./">Continuar comprando</a>
+      </div>
+
+      <p class="muted" style="margin-top:12px">
+        Dica: o status final sempre é confirmado via Mercado Pago (Webhook). Se este status ainda estiver “pending”, aguarde alguns minutos.
+      </p>
+    </div>
+  </main>
+
+  <script>
+    const WHATSAPP_NUMBER = "5521972841917";
+    const waLink = (msg) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+
+    const qs = new URLSearchParams(location.search);
+    const payment_id = qs.get("payment_id");
+    const status = qs.get("status");
+    const external_reference = qs.get("external_reference");
+    const merchant_order_id = qs.get("merchant_order_id");
+
+    document.getElementById("paymentTxt").textContent = payment_id || "—";
+    document.getElementById("statusTxt").textContent = status || "—";
+    document.getElementById("orderTxt").textContent = external_reference || merchant_order_id || "—";
+
+    document.getElementById("whatsBtn").href = waLink(
+      `Olá! Quero ajuda com meu pagamento no catálogo Cristal Bags.\n` +
+      (external_reference ? `Pedido: ${external_reference}\n` : "") +
+      (payment_id ? `Payment ID: ${payment_id}\n` : "") +
+      (status ? `Status: ${status}` : "")
+    );
+
+    async function verify(){
+      if(!payment_id) {
+        document.getElementById("pill").textContent = "Pagamento retornou sem payment_id.";
+        return;
+      }
+      try{
+        const url = `/api/payment-status?payment_id=${encodeURIComponent(payment_id)}&external_reference=${encodeURIComponent(external_reference||"")}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        document.getElementById("statusTxt").textContent = data.status || (status||"—");
+        document.getElementById("amountTxt").textContent = data.amount ? data.amount : "—";
+        document.getElementById("methodTxt").textContent = data.method || "—";
+        document.getElementById("cardTxt").textContent = data.card_last4 || "—";
+
+        const pill = document.getElementById("pill");
+        if(data.status === "approved"){
+          pill.textContent = "Pagamento aprovado ✅";
+          try{ localStorage.removeItem("cb_cart_v2"); }catch(e){}
+        }else if(data.status === "pending"){
+          pill.textContent = "Pagamento pendente ⏳";
+        }else if(data.status){
+          pill.textContent = `Status: ${data.status}`;
+        }else{
+          pill.textContent = "Não foi possível confirmar o pagamento.";
+        }
+      }catch(err){
+        document.getElementById("pill").textContent = "Não foi possível confirmar agora (tente atualizar).";
+      }
+    }
+    verify();
+  </script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cristal Bags — Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    body{ min-height:100vh; }
+    .adminWrap{ width:min(1100px, 92vw); margin: 40px auto 80px; }
+    .adminTop{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; }
+    .adminTitle{ font-family: var(--fontTitle); font-size: 40px; margin:0; letter-spacing: .02em; }
+    .adminTag{ opacity:.75; }
+    .adminCard{ background: rgba(255,255,255,.65); border: 1px solid rgba(255,255,255,.65); border-radius: 18px; box-shadow: var(--shadowSoft); padding: 18px; backdrop-filter: blur(16px); }
+    .adminRow{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .adminRow input{ flex: 1 1 240px; }
+    .adminMsg{ margin-top: 10px; font-size: 14px; opacity:.9; }
+    .adminGrid{ display:grid; grid-template-columns: 1.3fr .9fr; gap:16px; margin-top:16px; }
+    @media (max-width: 980px){ .adminGrid{ grid-template-columns: 1fr; } }
+
+    table{ width:100%; border-collapse: collapse; }
+    th, td{ padding: 10px 10px; border-bottom: 1px solid rgba(0,0,0,.06); vertical-align: middle; }
+    th{ text-align:left; font-size: 12px; letter-spacing:.08em; text-transform: uppercase; opacity: .7; }
+    .pImg{ width:52px; height:52px; border-radius: 12px; object-fit: cover; background: rgba(255,255,255,.6); }
+    .sku{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; opacity:.8; }
+    .stockInput{ width: 90px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,.08); background: rgba(255,255,255,.8); }
+    .toggle{ display:inline-flex; align-items:center; gap:8px; }
+    .miniBtn{ padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(0,0,0,.08); background: rgba(255,255,255,.9); cursor:pointer; }
+    .miniBtn:hover{ filter: brightness(.98); }
+    .miniBtn.primary{ background: linear-gradient(90deg, rgba(185,255,237,.95), rgba(255,226,190,.95)); }
+    .pill{ display:inline-block; padding: 6px 10px; border-radius: 999px; font-size: 12px; background: rgba(255,255,255,.8); border: 1px solid rgba(0,0,0,.06); }
+    .pill.ok{ background: rgba(185,255,237,.9); }
+    .pill.bad{ background: rgba(255,205,205,.9); }
+    .orderItems{ font-size: 12px; opacity: .8; }
+  </style>
+</head>
+<body>
+  <div class="adminWrap">
+    <div class="adminTop">
+      <div>
+        <h1 class="adminTitle">Admin</h1>
+        <div class="adminTag">Cristal Bags — estoque e pedidos</div>
+      </div>
+      <div class="adminRow" id="topActions" style="display:none;">
+        <button class="miniBtn" id="btnRefresh">Atualizar</button>
+        <button class="miniBtn" id="btnImport">Importar do products.json</button>
+        <button class="miniBtn" id="btnLogout">Sair</button>
+      </div>
+    </div>
+
+    <div class="adminCard" id="loginCard">
+      <div class="adminRow">
+        <input class="input" id="password" type="password" placeholder="Senha do admin" autocomplete="current-password" />
+        <button class="btn btn--primary" id="btnLogin">Entrar</button>
+      </div>
+      <div class="adminMsg" id="loginMsg"></div>
+      <div class="adminMsg" style="opacity:.7; margin-top:6px;">Dica: a senha é a variável <b>ADMIN_PASSWORD</b> no Vercel.</div>
+    </div>
+
+    <div class="adminGrid" id="dash" style="display:none;">
+      <div class="adminCard">
+        <div class="adminRow" style="justify-content:space-between;">
+          <h2 style="margin:0; font-size:18px;">Produtos</h2>
+          <span class="pill" id="prodStatus">—</span>
+        </div>
+        <div style="overflow:auto; margin-top:10px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Imagem</th>
+                <th>SKU</th>
+                <th>Produto</th>
+                <th>Estoque</th>
+                <th>Premium</th>
+                <th>Ativo</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="productsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="adminCard">
+        <div class="adminRow" style="justify-content:space-between;">
+          <h2 style="margin:0; font-size:18px;">Pedidos</h2>
+          <span class="pill" id="orderStatus">—</span>
+        </div>
+        <div style="overflow:auto; margin-top:10px; max-height: 520px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Cliente</th>
+                <th>Itens</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+        <div class="adminMsg" style="opacity:.7; margin-top:10px;">
+          Obs: dados de cartão não ficam no seu site — o Mercado Pago processa tudo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  async function api(path, opts={}){
+    const res = await fetch(path, {
+      headers: {"Content-Type": "application/json", ...(opts.headers||{})},
+      ...opts,
+      body: opts.body && typeof opts.body !== 'string' ? JSON.stringify(opts.body) : opts.body
+    });
+    const data = await res.json().catch(()=> ({}));
+    if(!res.ok){
+      const msg = (data && data.error) ? data.error : `Erro ${res.status}`;
+      throw new Error(msg);
+    }
+    return data;
+  }
+
+  function setMsg(el, msg, ok=true){
+    el.textContent = msg || '';
+    el.style.color = ok ? 'inherit' : '#b00020';
+  }
+
+  function formatBRLFromCents(cents){
+    try{
+      const v = (Number(cents||0)/100);
+      return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
+    }catch{ return `R$ ${(Number(cents||0)/100).toFixed(2)}`; }
+  }
+
+  function pill(el, text, kind){
+    el.textContent = text;
+    el.className = `pill ${kind||''}`.trim();
+  }
+
+  async function login(){
+    const pw = $('password').value;
+    if(!pw){ setMsg($('loginMsg'), 'Digite a senha.', false); return; }
+    setMsg($('loginMsg'), 'Entrando...');
+    try{
+      await api('/api/admin/login', {method:'POST', body:{password: pw}});
+      $('loginCard').style.display = 'none';
+      $('dash').style.display = '';
+      $('topActions').style.display = '';
+      await refreshAll();
+    }catch(e){
+      setMsg($('loginMsg'), e.message || 'Falha no login', false);
+    }
+  }
+
+  async function logout(){
+    try{ await api('/api/admin/logout', {method:'POST'}); }catch{}
+    location.reload();
+  }
+
+  async function refreshAll(){
+    await Promise.all([loadProducts(), loadOrders()]);
+  }
+
+  async function loadProducts(){
+    pill($('prodStatus'), 'Carregando...', '');
+    try{
+      const products = await api('/api/admin/products');
+      renderProducts(products);
+      pill($('prodStatus'), `${products.length} produtos`, 'ok');
+    }catch(e){
+      pill($('prodStatus'), 'Erro', 'bad');
+      $('productsBody').innerHTML = `<tr><td colspan="7" style="opacity:.8;">${e.message}</td></tr>`;
+    }
+  }
+
+  function renderProducts(list){
+    const body = $('productsBody');
+    body.innerHTML = '';
+    for(const p of list){
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><img class="pImg" src="/${(p.image||'').replace(/^\/+/, '')}" alt="" /></td>
+        <td><div class="sku">${p.sku||''}</div></td>
+        <td>
+          <div style="font-weight:700;">${p.name||''}</div>
+          <div style="font-size:12px; opacity:.7;">${p.category||''} • ${formatBRLFromCents(p.price_cents||0)}</div>
+        </td>
+        <td><input class="stockInput" type="number" min="0" value="${Number.isFinite(p.stock)? p.stock : 0}" data-sku="${p.sku}" /></td>
+        <td><label class="toggle"><input type="checkbox" data-premium="${p.sku}" ${p.premium? 'checked':''}/> <span style="font-size:12px; opacity:.8;">premium</span></label></td>
+        <td><label class="toggle"><input type="checkbox" data-active="${p.sku}" ${p.active? 'checked':''}/> <span style="font-size:12px; opacity:.8;">ativo</span></label></td>
+        <td><button class="miniBtn primary" data-save="${p.sku}">Salvar</button></td>
+      `;
+      body.appendChild(tr);
+    }
+
+    body.querySelectorAll('[data-save]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const sku = btn.getAttribute('data-save');
+        const stockEl = body.querySelector(`input[data-sku="${sku}"]`);
+        const premEl = body.querySelector(`input[data-premium="${sku}"]`);
+        const actEl = body.querySelector(`input[data-active="${sku}"]`);
+        btn.disabled = true;
+        btn.textContent = 'Salvando...';
+        try{
+          await api('/api/admin/products', {
+            method:'PATCH',
+            body:{
+              sku,
+              stock: Number(stockEl.value),
+              premium: !!premEl.checked,
+              active: !!actEl.checked,
+            }
+          });
+          btn.textContent = 'Salvo ✅';
+          setTimeout(()=> (btn.textContent='Salvar'), 900);
+        }catch(e){
+          btn.textContent = 'Erro';
+          alert(e.message || 'Erro ao salvar');
+        }finally{
+          btn.disabled = false;
+        }
+      });
+    });
+  }
+
+  async function loadOrders(){
+    pill($('orderStatus'), 'Carregando...', '');
+    try{
+      const orders = await api('/api/admin/orders');
+      renderOrders(orders);
+      pill($('orderStatus'), `${orders.length} pedidos`, 'ok');
+    }catch(e){
+      pill($('orderStatus'), 'Erro', 'bad');
+      $('ordersBody').innerHTML = `<tr><td colspan="4" style="opacity:.8;">${e.message}</td></tr>`;
+    }
+  }
+
+  function renderOrders(list){
+    const body = $('ordersBody');
+    body.innerHTML = '';
+    for(const o of list){
+      const tr = document.createElement('tr');
+      const status = (o.status||'—').toString();
+      const total = (o.total_cents != null) ? formatBRLFromCents(o.total_cents) : (o.total != null ? `R$ ${o.total}` : '—');
+      const customer = o.payer_email || o.payer_name || '—';
+      const items = Array.isArray(o.items) ? o.items.map(it => `${it.quantity||1}× ${it.title||it.id||''}`).join(' • ') : '';
+      tr.innerHTML = `
+        <td><div class="sku">${status}</div><div style="font-size:11px; opacity:.6;">${o.payment_id||''}</div></td>
+        <td style="white-space:nowrap;">${total}</td>
+        <td><div style="font-size:12px;">${customer}</div></td>
+        <td class="orderItems">${items || '—'}</td>
+      `;
+      body.appendChild(tr);
+    }
+    if(!list.length){
+      body.innerHTML = '<tr><td colspan="4" style="opacity:.7;">Sem pedidos ainda.</td></tr>';
+    }
+  }
+
+  async function doImport(){
+    if(!confirm('Importar produtos do /data/products.json para o Supabase?')) return;
+    $('btnImport').disabled = true;
+    $('btnImport').textContent = 'Importando...';
+    try{
+      const r = await api('/api/admin/import-products', {method:'POST'});
+      alert(`Importado: ${r.count} produtos.`);
+      await refreshAll();
+    }catch(e){
+      alert(e.message || 'Erro ao importar');
+    }finally{
+      $('btnImport').disabled = false;
+      $('btnImport').textContent = 'Importar do products.json';
+    }
+  }
+
+  $('btnLogin').addEventListener('click', login);
+  $('password').addEventListener('keydown', (e)=> { if(e.key==='Enter') login(); });
+  $('btnLogout').addEventListener('click', logout);
+  $('btnRefresh').addEventListener('click', refreshAll);
+  $('btnImport').addEventListener('click', doImport);
+</script>
+</body>
+</html>
