@@ -180,15 +180,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const shippingData = {
-      name: name.value,
-      email: email.value,
-      phone: phone.value,
-      street: street.value,
-      number: number.value,
-      city: city.value,
-      state: state.value,
-      zip: zip.value
-    };
+  name: document.getElementById("name").value.trim(),
+  email: document.getElementById("email").value.trim(),
+  phone: document.getElementById("phone").value.trim(),
+  street: document.getElementById("street").value.trim(),
+  number: document.getElementById("number").value.trim(),
+  city: document.getElementById("city").value.trim(),
+  state: document.getElementById("state").value.trim(),
+  zip: document.getElementById("zip").value.trim(),
+};
 
     try {
       console.log("Sending checkout request...");
