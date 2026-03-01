@@ -73,7 +73,7 @@ export async function POST(request) {
       });
     }
 
-    const externalRef = crypto.randomUUID();
+const externalRef = "CB-" + Date.now();
 
     // ✅ STORE ORDER IN SUPABASE
     await sbRequest("orders", {
